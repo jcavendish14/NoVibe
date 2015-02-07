@@ -132,22 +132,21 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private void checkLoc() {
         for (Location e : locDatabase) {
             if (e.distanceTo(curLoc) < 30) {
-                new AlertDialog.Builder(this)
-                    .setTitle("OnVibe")
-                    .setMessage("Do you wish to put phone on vibrate?")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+                    builder1.setMessage("Do you wish to put phone on vibrate?");
+                    builder1.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                             dialog.cancel();
                         }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    });
+                    builder1.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
                         }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
+                    });
+                    AlertDialog alert1 = builder1.create();
+                    alert1.show();
                 Context context = getApplicationContext();
                 Toast toast = Toast.makeText(context, "IT WORKS", Toast.LENGTH_LONG);
                 toast.show();
@@ -183,18 +182,5 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public static class RingerDialogFragment extends android.support.v4.app.DialogFragment {
-
-        private AudioManager mAudioManager;
-
-        public static RingerDialogFragment newInstance(int title) {
-            RingerDialogFragment frag = new RingerDialogFragment();
-            Bundle args = new Bundle();
-            args.putInt("title", title);
-            frag.setArguments(args);
-            return frag;
-        }
     }
 }
