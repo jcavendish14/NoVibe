@@ -26,6 +26,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private Location curLoc;
     private String lastUpdTime;
     private LocationRequest mLocationRequest=new LocationRequest();
+    private LocationStore locDatabase = new LocationStoreCWRU();
 
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
@@ -65,7 +66,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     public void onLocationChanged(Location location) {
         curLoc = location;
         lastUpdTime = DateFormat.getTimeInstance().format(new Date());
-        updateUI();
+        checkLoc();
     }
 
     @Override
@@ -103,7 +104,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             if(savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
                 lastUpdTime = savedInstanceState.getString(LAST_UPDATED_TIME_STRING_KEY);
             }
-            updateUI();
+            checkLoc();
         }
     }
 
@@ -115,12 +116,25 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
-    private void updateUI() {
+    private void checkLoc() {
+        for (Location e : locDatabase) {
+            if (e.distanceTo(curLoc) < 30) {
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, "IT WORKS", Toast.LENGTH_LONG);
+                toast.show();
+            } else {
+                Context context = getApplicationContext();
+                Toast toast = Toast.makeText(context, "" + e.distanceTo(curLoc), Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
+    /* private void updateUI() {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, "Longitude:" + curLoc.getLongitude() + "Latitude" +
                 curLoc.getLatitude(), Toast.LENGTH_LONG);
         toast.show();
-    }
+    } */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
