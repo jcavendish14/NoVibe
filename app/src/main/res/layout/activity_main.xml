@@ -42,6 +42,7 @@
         android:id="@+id/button"
         android:layout_below="@+id/switch1"
         android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:onClick="addLoc" />
 
 </RelativeLayout>
