@@ -6,44 +6,42 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
     android:background="#000000"
     android:clickable="false"
-    android:touchscreenBlocksFocus="false">
+    android:touchscreenBlocksFocus="false"
+    android:backgroundTint="#ff000000">
 
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#54C571"
-        android:textStyle="bold"
+        style ="@style/AppTheme"
         android:text="OnVibe"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:singleLine="false"
         android:elevation="@dimen/abc_action_bar_stacked_max_height"
-        android:background="#0000"
-        android:textSize="48dp"></TextView>
+        android:background="#000000"
+        android:textColor="#56F743"
+        android:textSize="48dp"/>
 
     <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Disable Warnings"
+        style ="@style/AppTheme"
+        android:text="Warnings"
         android:id="@+id/switch1"
         android:layout_marginTop="33dp"
         android:checked="false"
         android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF"
-        android:onClick="disable" />
+        android:onClick="disable"
+        android:textSize="28dp"
+        android:textColorHighlight="#ffffad8f" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style ="@style/AppTheme"
         android:text="Add This Location To Alerts"
         android:id="@+id/button"
+        android:textColor="#000000"
+        android:onClick="addLoc"
+        android:layout_marginTop="31dp"
         android:layout_below="@+id/switch1"
         android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF"
-        android:onClick="addLoc" />
+        android:textSize="32dp"
+        android:textColorHighlight="#0041ff22" />
 
 </RelativeLayout>
