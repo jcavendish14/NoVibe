@@ -27,13 +27,14 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Activate Warnings"
+        android:text="Disable Warnings"
         android:id="@+id/switch1"
         android:layout_marginTop="33dp"
         android:checked="false"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:onClick="disable" />
 
     <Button
         android:layout_width="wrap_content"
@@ -42,6 +43,7 @@
         android:id="@+id/button"
         android:layout_below="@+id/switch1"
         android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:onClick="addLoc" />
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.app.Activity;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.content.Context;
 
@@ -14,12 +15,15 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import android.widget.Switch;
+import android.view.View;
 
 import java.text.DateFormat;
 import java.util.Date;
 
 
-public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
+public class MainActivity extends Activity implements ConnectionCallbacks,
+        OnConnectionFailedListener, LocationListener {
 
     private boolean reqLocUpd = true;
     private GoogleApiClient mGoogleApiClient;
@@ -136,6 +140,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 curLoc.getLatitude(), Toast.LENGTH_LONG);
         toast.show();
     } */
+
+    public void addLoc(View view) {
+        locDatabase.addLocation(curLoc);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
