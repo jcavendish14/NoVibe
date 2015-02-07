@@ -23,7 +23,6 @@ import java.util.Date;
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
     private boolean reqLocUpd = true;
-    protected LocationRequest locReq = LocationRequest.create();
     private GoogleApiClient mGoogleApiClient;
     private Location curLoc;
     private String lastUpdTime;
@@ -56,15 +55,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             .build();
     }
 
-    protected void createLocationRequest() {
-        LocationRequest locReq = new LocationRequest();
-        locReq.setInterval(5000);
-        locReq.setFastestInterval(2000);
-        locReq.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
     protected void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locReq, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     @Override
