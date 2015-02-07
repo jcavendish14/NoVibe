@@ -138,7 +138,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     private void checkLoc() {
         if (lastCancel != null || mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE
-                || mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE){
+                || mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT){
             return;
         }
         for (Location e : locDatabase) {
