@@ -39,7 +39,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private String lastUpdTime;
     private LocationRequest mLocationRequest=new LocationRequest();
     private LocationStore locDatabase = new LocationStoreCWRU();
-    private AudioManager mAudioManager;
+    private AudioManager mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
