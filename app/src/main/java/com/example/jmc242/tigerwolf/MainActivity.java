@@ -1,5 +1,6 @@
 package com.example.jmc242.tigerwolf;
 
+import android.app.Activity;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -18,9 +19,9 @@ import java.text.DateFormat;
 import java.util.Date;
 
 
-public class MainActivity extends ActionBarActivity implements ConnectionCallbacks, OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
-    private boolean reqLocUpd;
+    private boolean reqLocUpd = true;
     private LocationRequest locReq;
     private GoogleApiClient mGoogleApiClient;
     private Location curLoc;
@@ -31,12 +32,14 @@ public class MainActivity extends ActionBarActivity implements ConnectionCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buildGoogleApiClient();
+        createLocationRequest();
+        startLocationUpdates();
+        onLocationChanged(curLoc);
     }
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-            .addApi(Drive.API)
-            .addScope(Drive.SCOPE_FILE)
+            .addApi(LocationServices.API)
             .addConnectionCallbacks(this)
             .addOnConnectionFailedListener(this)
             .build();
