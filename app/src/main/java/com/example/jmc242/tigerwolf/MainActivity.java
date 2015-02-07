@@ -1,61 +1,93 @@
 package com.example.jmc242.tigerwolf;
 
-import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.location.Criteria;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ConnectionCallbacks, OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+
+    private boolean reqLocUpd;
+    private LocationRequest locReq;
+    private GoogleApiClient mGoogleApiClient;
+    private Location curLoc;
+    private String lastUpdTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        LocationManager locMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-        LocationListener locList = new MyLocationListener();
-        Criteria accuracy = new Criteria();
-        accuracy.setAccuracy(Criteria.ACCURACY_FINE);
-        String provider = locMan.getBestProvider(accuracy, true);
-        locMan.requestLocationUpdates(provider, 0, 0, locList);
+        buildGoogleApiClient();
     }
 
-    public class MyLocationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location loc) {
-            loc.getLatitude();
-            loc.getLongitude();
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+            .addApi(Drive.API)
+            .addScope(Drive.SCOPE_FILE)
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .build();
+    }
 
-            String Text = "My current location is: " +
-            "Latitude = " + loc.getLatitude() +
-            "Longitude = " + loc.getLongitude();
+    protected void createLocationRequest() {
+        LocationRequest locReq = new LocationRequest();
+        locReq.setInterval(120000);
+        locReq.setFastestInterval(80000);
+        locReq.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
 
-            Toast.makeText(getApplicationContext(), Text, Toast.LENGTH_LONG).show();
-        }
+    protected void startLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locReq, this);
+    }
 
-        @Override
-        public void onProviderDisabled(String provider) {
-            Toast.makeText(getApplicationContext(), "GPS Disabled", Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onLocationChanged(Location location) {
+        curLoc = location;
+        lastUpdTime = DateFormat.getTimeInstance().format(new Date());
+        updateUI();
+    }
 
-        @Override
-        public void onProviderEnabled(String provider) {
-            Toast.makeText(getApplicationContext(), "GPS Enabled", Toast.LENGTH_SHORT).show();
-        }
+    private void updateUI() {
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
 
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        if(reqLocUpd) {
+            startLocationUpdates();
         }
     }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+
+    }
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
