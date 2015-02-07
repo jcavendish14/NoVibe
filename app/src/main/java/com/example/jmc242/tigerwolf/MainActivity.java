@@ -1,11 +1,13 @@
 package com.example.jmc242.tigerwolf;
 
-import android.app.Activity;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.app.Activity;
+import android.widget.Toast;
+import android.content.Context;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -14,6 +16,7 @@ import com.google.android.gms.drive.Drive;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -47,8 +50,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     protected void createLocationRequest() {
         LocationRequest locReq = new LocationRequest();
-        locReq.setInterval(120000);
-        locReq.setFastestInterval(80000);
+        locReq.setInterval(5000);
+        locReq.setFastestInterval(2000);
         locReq.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -64,7 +67,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     }
 
     private void updateUI() {
-
+        Context context = getApplicationContext();
+        Toast toast = Toast.makeText(context, "Longitude:" + curLoc.getLongitude() + "Latitude" +
+                curLoc.getLatitude(), Toast.LENGTH_LONG);
+        toast.show();
     }
 
     protected void stopLocationUpdates() {
