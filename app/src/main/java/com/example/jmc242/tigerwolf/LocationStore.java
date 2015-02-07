@@ -85,7 +85,4 @@ public class LocationStore implements Iterable<Location> {
             this.next = next;
         }
     }
-
-    public static void main(String[] args) {
-    }
 }
