@@ -14,7 +14,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -26,7 +25,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private GoogleApiClient mGoogleApiClient;
     private Location curLoc;
     private String lastUpdTime;
-    LocationRequest mLocationRequest=new LocationRequest();
+    private LocationRequest mLocationRequest=new LocationRequest();
+
+    protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
+    protected final static String LOCATION_KEY = "location-key";
+    protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,23 +44,21 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        updateValuesFromBundle(savedInstanceState);
     }
 
+    @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
     }
 
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-            .addApi(LocationServices.API)
-            .addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
-            .build();
-    }
-
-    protected void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mGoogleApiClient.isConnected() && !reqLocUpd) {
+            startLocationUpdates();
+        }
     }
 
     @Override
@@ -65,17 +67,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         lastUpdTime = DateFormat.getTimeInstance().format(new Date());
         updateUI();
     }
-
-    private void updateUI() {
-        Context context = getApplicationContext();
-        Toast toast = Toast.makeText(context, "Longitude:" + curLoc.getLongitude() + "Latitude" +
-                curLoc.getLatitude(), Toast.LENGTH_LONG);
-        toast.show();
-    }
-
-    /*protected void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-    }*/
 
     @Override
     public void onConnected(Bundle connectionHint) {
@@ -94,9 +85,42 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     }
 
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, reqLocUpd);
+        savedInstanceState.putParcelable(LOCATION_KEY, curLoc);
+        savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, lastUpdTime);
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
+    private void updateValuesFromBundle(Bundle savedInstanceState) {
+        if(savedInstanceState != null) {
+            if(savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
+                reqLocUpd = savedInstanceState.getBoolean(REQUESTING_LOCATION_UPDATES_KEY);
+            }
+            if(savedInstanceState.keySet().contains(LOCATION_KEY)) {
+                curLoc = savedInstanceState.getParcelable(LOCATION_KEY);
+            }
+            if(savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
+                lastUpdTime = savedInstanceState.getString(LAST_UPDATED_TIME_STRING_KEY);
+            }
+            updateUI();
+        }
+    }
 
+    protected void startLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
 
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+    }
+
+    private void updateUI() {
+        Context context = getApplicationContext();
+        Toast toast = Toast.makeText(context, "Longitude:" + curLoc.getLongitude() + "Latitude" +
+                curLoc.getLatitude(), Toast.LENGTH_LONG);
+        toast.show();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
