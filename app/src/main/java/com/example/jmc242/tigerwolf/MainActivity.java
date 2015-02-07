@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
             loc.getLongitude();
 
             String Text = "My current location is: " +
-            "Latidude = " + loc.getLatitude() +
+            "Latitude = " + loc.getLatitude() +
             "Longitude = " + loc.getLongitude();
 
             Toast.makeText(getApplicationContext(), Text, Toast.LENGTH_LONG).show();
