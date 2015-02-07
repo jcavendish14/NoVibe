@@ -14,4 +14,22 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activate Warnings"
+        android:id="@+id/switch1"
+        android:layout_marginTop="33dp"
+        android:checked="false"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add This Location To Alerts"
+        android:id="@+id/button"
+        android:layout_below="@+id/switch1"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
