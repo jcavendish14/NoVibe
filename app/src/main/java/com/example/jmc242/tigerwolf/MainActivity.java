@@ -39,7 +39,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private String lastUpdTime;
     private LocationRequest mLocationRequest=new LocationRequest();
     private LocationStore locDatabase = new LocationStoreCWRU();
-    private AudioManager mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+    private AudioManager mAudioManager;
 
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
@@ -59,6 +59,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         updateValuesFromBundle(savedInstanceState);
+        mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
     }
 
     @Override
