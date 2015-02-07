@@ -142,7 +142,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             return;
         }
         for (Location e : locDatabase) {
-            if (e.distanceTo(curLoc) < 30) {
+            if (e.distanceTo(curLoc) < 30 && mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE && mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
                     builder1.setMessage("Do you wish to put phone on vibrate?");
                     builder1.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
