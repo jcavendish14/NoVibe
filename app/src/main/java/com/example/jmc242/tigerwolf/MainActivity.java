@@ -119,6 +119,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private void checkLoc() {
         for (Location e : locDatabase) {
             if (e.distanceTo(curLoc) < 30) {
+                RingerDialogFragment rdf = new RingerDialogFragment();
                 Context context = getApplicationContext();
                 Toast toast = Toast.makeText(context, "IT WORKS", Toast.LENGTH_LONG);
                 toast.show();
