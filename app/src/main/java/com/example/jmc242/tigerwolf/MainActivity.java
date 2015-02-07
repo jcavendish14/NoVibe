@@ -159,13 +159,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                     });
                     AlertDialog alert1 = builder1.create();
                     alert1.show();
-                Context context = getApplicationContext();
-                Toast toast = Toast.makeText(context, "IT WORKS", Toast.LENGTH_LONG);
-                toast.show();
-            } else {
-                Context context = getApplicationContext();
-                Toast toast = Toast.makeText(context, "" + e.distanceTo(curLoc), Toast.LENGTH_LONG);
-                toast.show();
             }
         }
     }

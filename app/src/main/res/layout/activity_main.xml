@@ -21,17 +21,6 @@
         android:textColor="#56F743"
         android:textSize="48dp"/>
 
-    <Switch
-        style ="@style/AppTheme"
-        android:text="Warnings"
-        android:id="@+id/switch1"
-        android:layout_marginTop="33dp"
-        android:checked="false"
-        android:layout_below="@+id/textView"
-        android:onClick="disable"
-        android:textSize="28dp"
-        android:textColorHighlight="#ffffad8f" />
-
     <Button
         style ="@style/AppTheme"
         android:text="Add This Location To Alerts"
@@ -39,9 +28,9 @@
         android:textColor="#000000"
         android:onClick="addLoc"
         android:layout_marginTop="31dp"
-        android:layout_below="@+id/switch1"
         android:layout_centerHorizontal="true"
         android:textSize="32dp"
-        android:textColorHighlight="#0041ff22" />
+        android:textColorHighlight="#0041ff22"
+        android:layout_below="@+id/textView" />
 
 </RelativeLayout>
