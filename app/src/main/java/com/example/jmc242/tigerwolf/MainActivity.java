@@ -1,7 +1,15 @@
 package com.example.jmc242.tigerwolf;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.location.Location;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.app.Activity;
 import android.widget.CompoundButton;
@@ -22,7 +30,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 
-public class MainActivity extends Activity implements ConnectionCallbacks,
+public class MainActivity extends FragmentActivity implements ConnectionCallbacks,
         OnConnectionFailedListener, LocationListener {
 
     private boolean reqLocUpd = true;
@@ -31,6 +39,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks,
     private String lastUpdTime;
     private LocationRequest mLocationRequest=new LocationRequest();
     private LocationStore locDatabase = new LocationStoreCWRU();
+    private AudioManager mAudioManager;
 
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
@@ -123,7 +132,22 @@ public class MainActivity extends Activity implements ConnectionCallbacks,
     private void checkLoc() {
         for (Location e : locDatabase) {
             if (e.distanceTo(curLoc) < 30) {
-                RingerDialogFragment rdf = new RingerDialogFragment();
+                new AlertDialog.Builder(this)
+                    .setTitle("OnVibe")
+                    .setMessage("Do you wish to put phone on vibrate?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                            dialog.cancel();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
                 Context context = getApplicationContext();
                 Toast toast = Toast.makeText(context, "IT WORKS", Toast.LENGTH_LONG);
                 toast.show();
@@ -134,6 +158,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks,
             }
         }
     }
+
     /* private void updateUI() {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, "Longitude:" + curLoc.getLongitude() + "Latitude" +
@@ -158,5 +183,18 @@ public class MainActivity extends Activity implements ConnectionCallbacks,
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class RingerDialogFragment extends android.support.v4.app.DialogFragment {
+
+        private AudioManager mAudioManager;
+
+        public static RingerDialogFragment newInstance(int title) {
+            RingerDialogFragment frag = new RingerDialogFragment();
+            Bundle args = new Bundle();
+            args.putInt("title", title);
+            frag.setArguments(args);
+            return frag;
+        }
     }
 }
