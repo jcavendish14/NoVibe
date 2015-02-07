@@ -8,8 +8,7 @@ import android.location.Location;
 public class LocationStoreCWRU extends LocationStore {
     public LocationStoreCWRU() {
         Location t1 = new Location("Test");
-        //t1.setLongitude(-81.607898);
-        t1.setLongitude(81.607898);
+        t1.setLongitude(-81.607898);
         t1.setLatitude(41.502657);
         this.addLocation(t1);
     }

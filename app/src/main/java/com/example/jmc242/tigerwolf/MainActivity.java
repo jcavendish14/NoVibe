@@ -15,6 +15,8 @@ import android.app.Activity;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.content.Context;
+import android.widget.Switch;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,6 +42,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private LocationRequest mLocationRequest=new LocationRequest();
     private LocationStore locDatabase = new LocationStoreCWRU();
     private AudioManager mAudioManager;
+    private Location lastCancel;
 
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
@@ -80,6 +83,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     public void onLocationChanged(Location location) {
         curLoc = location;
         lastUpdTime = DateFormat.getTimeInstance().format(new Date());
+        if (lastCancel != null && lastCancel.distanceTo(curLoc) > 30) {
+            lastCancel = null;
+        }
         checkLoc();
     }
 
@@ -131,6 +137,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
     private void checkLoc() {
+        if (lastCancel != null || mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE
+                || mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE){
+            return;
+        }
         for (Location e : locDatabase) {
             if (e.distanceTo(curLoc) < 30) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
@@ -143,6 +153,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                     });
                     builder1.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            lastCancel = curLoc;
                             dialog.cancel();
                         }
                     });
