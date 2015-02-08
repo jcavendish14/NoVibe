@@ -1,22 +1,15 @@
 package com.example.jmc242.tigerwolf;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.MenuItem;
-import android.app.Activity;
-import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.content.Context;
-import android.widget.Switch;
 import android.view.View;
+import android.os.Vibrator;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,8 +18,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import android.widget.Switch;
-import android.view.View;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -143,6 +134,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         }
         for (Location e : locDatabase) {
             if (e.distanceTo(curLoc) < 30 && mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE && mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                Vibrator v = (Vibrator) this.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500);
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
                     builder1.setMessage("Do you wish to put phone on vibrate?");
                     builder1.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
